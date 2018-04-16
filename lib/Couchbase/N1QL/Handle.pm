@@ -70,7 +70,9 @@ sub row_callback {
             printf("Decoding error!\n");
             printf("$@: %s\n", $row);
         }
-        bless $row, 'Couchbase::N1QL::Row';
+        # -- Fix for allowing list-type resultsets (eg using RAW in N1QL query ) --
+	    bless( ref $row ? $row : [ $row ] , 'Couchbase::N1QL::Row')  ;
+        #bless $row, 'Couchbase::N1QL::Row';
         push @{$self->rows}, $row;
     }
 }
