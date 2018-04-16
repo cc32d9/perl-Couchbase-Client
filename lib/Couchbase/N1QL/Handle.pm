@@ -71,8 +71,7 @@ sub row_callback {
             printf("$@: %s\n", $row);
         }
         # -- Fix for allowing list-type resultsets (eg using RAW in N1QL query ) --
-	    bless( ref $row ? $row : [ $row ] , 'Couchbase::N1QL::Row')  ;
-        #bless $row, 'Couchbase::N1QL::Row';
+	bless( ref $row ? $row : [ $row ] , 'Couchbase::N1QL::Row')  ;
         push @{$self->rows}, $row;
     }
 }
