@@ -60,7 +60,7 @@ sub process_meta {
 
     $self->_priv->{errinfo} = $self->meta->{errors};
 }
-use Robot::Logger ;
+
 sub row_callback {
     my ($self,$rows) = @_;
     if (!$rows) {
