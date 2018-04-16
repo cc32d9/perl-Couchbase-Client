@@ -2,16 +2,20 @@ package Couchbase::N1QL::Row;
 use strict;
 use warnings;
 
+package Couchbase::N1QL::List;
+use strict;
+use warnings;
+
 package Couchbase::N1QL::Handle;
 use strict;
 use warnings;
 use Couchbase;
 use Couchbase::_GlueConstants;
 use Couchbase::N1QL::Params;
-use Couchbase::JSON;
+use JSON::MaybeXS;
 use base (qw(Couchbase::View::Handle));
 
-my $JSON = Couchbase::JSON->new->allow_nonref;
+my $JSON = JSON::MaybeXS->new->allow_nonref;
 
 sub new {
     my ($cls, $bucket, $query, $qargs, $params) = @_;
@@ -56,13 +60,14 @@ sub process_meta {
 
     $self->_priv->{errinfo} = $self->meta->{errors};
 }
-
+use Robot::Logger ;
 sub row_callback {
     my ($self,$rows) = @_;
     if (!$rows) {
         $self->process_meta();
         return;
     }
+    my $raw ;
     foreach my $row (@$rows) {
         eval {
             $row = $JSON->decode($row);
@@ -70,9 +75,18 @@ sub row_callback {
             printf("Decoding error!\n");
             printf("$@: %s\n", $row);
         }
+        
         # -- Fix for allowing list-type resultsets (eg using RAW in N1QL query ) --
-	bless( ref $row ? $row : [ $row ] , 'Couchbase::N1QL::Row')  ;
-        push @{$self->rows}, $row;
+        if (ref $row ){
+	    bless( $row , 'Couchbase::N1QL::Row')  ;
+	    push @{$self->rows}, $row;
+        }
+        else {
+            push @$raw , $row ;
+        }
+    }
+    if ( $raw ){
+    	push @{$self->rows} , bless( $raw , 'Couchbase::N1QL::List') ;
     }
 }
 
