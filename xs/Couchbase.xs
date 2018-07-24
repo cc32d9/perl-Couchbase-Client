@@ -36,6 +36,7 @@ PLCB_construct(const char *pkg, HV *hvopts)
     PLCB_t *object;
     plcb_OPTION options[] = {
         PLCB_KWARG("connstr", CSTRING, &cr_opts.v.v3.connstr),
+        PLCB_KWARG("username", CSTRING, &cr_opts.v.v3.username),
         PLCB_KWARG("password", CSTRING, &cr_opts.v.v3.passwd),
         PLCB_KWARG("io", SV, &iops_impl),
         PLCB_KWARG("on_connect", CV, &conncb),
