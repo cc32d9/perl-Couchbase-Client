@@ -234,7 +234,7 @@ __END__
 Couchbase::Bucket - Couchbase Cluster data access
 
 
-=head1 SYNOPSIS
+=head1 SYNOPSIS 
 
 
     # Imports
@@ -242,7 +242,7 @@ Couchbase::Bucket - Couchbase Cluster data access
     use Couchbase::Document;
 
     # Create a new connection
-    my $cb = Couchbase::Bucket->new("couchbases://anynode/bucket", { password => "secret" });
+    my $cb = Couchbase::Bucket->new("couchbases://anynode/bucket", { username => "user" , password => "secret" });
 
     # Create and store a document
     my $doc = Couchbase::Document->new("idstring", { json => ["encodable", "string"] });
@@ -372,8 +372,8 @@ Additionally, ensure that the C<certpath> option contains the correct path, for 
 
 =head3 Specifying Bucket Credentials
 
-Often, the bucket will be password protected. You can specify the password using the
-C<password> option in the C<$options> hashref in the constructor.
+Often, the bucket will be password protected. You can specify the user credentials using the
+C<username> and C<password> options in the C<$options> hashref in the constructor.
 
 
 =head3 new($connstr, $options)
