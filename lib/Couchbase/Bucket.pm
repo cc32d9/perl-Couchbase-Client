@@ -16,7 +16,7 @@ use Couchbase::View::Handle;
 use Couchbase::HTTPDocument;
 use Couchbase::N1QL::Handle;
 
-my $_JSON = Couchbase::JSON->new()->allow_nonref;
+my $_JSON = Couchbase::JSON->new()->allow_nonref->canonical;
 sub _js_encode { $_JSON->encode($_[0]) }
 sub _js_decode { $_JSON->decode($_[0]) }
 
